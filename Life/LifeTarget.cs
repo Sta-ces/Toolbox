@@ -28,7 +28,7 @@ public class LifeTarget : Life
 
 	private int m_targetLife;
 
-    internal void SetAtFullLife()
+    public void SetAtFullLife()
     {
        TheLife = m_maxLife;
     }
