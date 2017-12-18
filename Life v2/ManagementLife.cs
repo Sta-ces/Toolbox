@@ -22,8 +22,8 @@ public class ManagementLife : MonoBehaviour
 
 		void Awake()
 		{
-            
-		}
+            m_characterLife = m_characterMaxHealth;
+        }
 	
 		void Update ()
 		{
@@ -39,10 +39,10 @@ public class ManagementLife : MonoBehaviour
 
     #region Tools Debug And Utility
 
-        [ContextMenu("Do Something")]
-        private void DoSomething()
+        [ContextMenu("Focus")]
+        private void FocusObject()
         {
-            Debug.Log("Something");
+            SceneView.lastActiveSceneView.FrameSelected();
         }
 
         void OnDrawGizmos()
