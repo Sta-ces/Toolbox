@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,17 +16,30 @@ public class LifeTarget : Life
 
 	void Update()
 	{
-		m_targetLife = GetTargetLife(m_life, m_maxLife);
-		if(m_targetLife <= 0)
-			isDead(gameObject);
-		else
-			isAlive(gameObject);
-	} 
+		m_targetLife = GetTargetLife(TheLife, m_maxLife);
+		if(isTargetAlive(gameObject,m_targetLife))
+		{}
+	}
 
 	void OnValidate()
 	{
-		d_life = GetTargetLife(m_life, m_maxLife);
+		d_life = GetTargetLife(TheLife, m_maxLife);
 	}
 
 	private int m_targetLife;
+
+    internal void SetAtFullLife()
+    {
+       TheLife = m_maxLife;
+    }
+
+    public override void SetAsDeath()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override void SetFullLife()
+    {
+        throw new NotImplementedException();
+    }
 }
