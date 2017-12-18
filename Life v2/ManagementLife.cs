@@ -9,7 +9,8 @@ public class ManagementLife : MonoBehaviour
     #region Public Members
 
         [Header("Parameter Character")]
-        public int m_maxHealth;
+        public int m_characterMaxHealth;
+        public int m_characterLife;
 
 	#endregion
 
@@ -19,15 +20,20 @@ public class ManagementLife : MonoBehaviour
 
 	#region System
 
-		void Start ()
+		void Awake()
 		{
-			
+            
 		}
 	
 		void Update ()
 		{
 			
 		}
+
+        void OnValidate()
+        {
+            m_characterLife = Mathf.Clamp(m_characterLife, 0, m_characterMaxHealth);
+        }
 
     #endregion
 
@@ -39,14 +45,9 @@ public class ManagementLife : MonoBehaviour
             Debug.Log("Something");
         }
 
-        private string m_textLabel;
-        void OnGUI()
+        void OnDrawGizmos()
         {
-            //GUILayout.Label(m_textLabel);
-            m_textLabel = EditorGUI.TextField(
-                            new Rect(0, 0, 100, 20),
-                            "Textes de Monsieur : ",
-                            m_textLabel);
+            Gizmos.DrawIcon(transform.position, "heart.png");
         }
 
     #endregion
