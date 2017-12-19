@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -14,24 +15,32 @@ public class CreateProjectFolderWindowEditor : EditorWindow
 
     void OnGUI()
     {
+        GUILayout.BeginHorizontal();
+            GUILayout.Label("Path :", GUILayout.Width(50));
+            m_path = GUILayout.TextField(m_path);
+        GUILayout.EndHorizontal();
+
         GUILayout.Label("Folders to create :");
-        foreach (FolderToCreate folder in m_listFolder)
+
+        foreach (FolderToCreate folder in m_listFolder.ToList())
         {
-            folder.m_activeFolder = GUILayout.Toggle(folder.m_activeFolder, folder.m_folder);
+            GUILayout.BeginHorizontal();
+                if (GUILayout.Button("-", GUILayout.Width(20)))
+                    // Remove Folder
+                    m_listFolder.Remove(folder);
+                folder.m_activeFolder = GUILayout.Toggle(folder.m_activeFolder, folder.m_folder);
+            GUILayout.EndHorizontal();
         }
 
         GUILayout.BeginHorizontal();
-            newName = GUILayout.TextField(newName);
-            if (GUILayout.Button("Add folder to create"))
-            {
+            if (GUILayout.Button("+", GUILayout.Width(20)))
+                // Add Folder
                 m_listFolder.Add(new FolderToCreate(newName,true));
-            }
+            newName = GUILayout.TextField(newName);
         GUILayout.EndHorizontal();
 
-        if (GUILayout.Button("Create Folder"))
-        {
-            CreateProject(m_listFolder);
-        }
+        if (GUILayout.Button("Create Folders"))
+            CreateProject(m_listFolder, m_path);
     }
 
     private void Awake()
@@ -60,17 +69,17 @@ public class CreateProjectFolderWindowEditor : EditorWindow
         }
     }
 
-    public static void CreateProject(List<FolderToCreate> _folders)
+    public static void CreateProject(List<FolderToCreate> _folders, string _path)
     {
-        string path = "Assets/Test";
         foreach (FolderToCreate folder in _folders)
         {
-            if(folder.m_activeFolder && !Directory.Exists(path+"/"+folder.m_folder))
-                AssetDatabase.CreateFolder(path, folder.m_folder);
+            if(folder.m_activeFolder && !Directory.Exists(_path+"/"+folder.m_folder))
+                AssetDatabase.CreateFolder(_path, folder.m_folder);
         }
         AssetDatabase.Refresh();
     }
 
     private List<FolderToCreate> m_listFolder = new List<FolderToCreate>();
     private string newName = "name of your folder";
+    private string m_path = "Assets";
 }
